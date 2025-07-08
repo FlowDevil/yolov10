@@ -828,7 +828,7 @@ class SCDown(nn.Module):
         return self.cv2(self.cv1(x))
 
 class InvertedBlock(nn.Module):
-    def __init__(self, ch_in, ch_out, expand_ratio, stride):
+    def __init__(self, c1, c2, expand_ratio, stride):
         super(InvertedBlock, self).__init__()
 
         self.stride = stride
