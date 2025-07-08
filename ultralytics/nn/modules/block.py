@@ -843,9 +843,9 @@ class InvertedBlock(nn.Module):
             layers.append(Conv(c1, hidden_dim, 1, 1))
         layers.extend([
             #dw
-            DWConv(hidden_dim, s=stride, k=3 ),
+            DWConv(hidden_dim,hidden_dim, s=stride, k=3 ),
             #pw
-            Conv(hidden_dim, c2)
+            Conv(hidden_dim, c2, 1, 1)
         ])
 
         self.layers = nn.Sequential(*layers)
