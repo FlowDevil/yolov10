@@ -38,6 +38,7 @@ __all__ = (
     "CBFuse",
     "CBLinear",
     "Silence",
+    "InvertedBlock",
 )
 
 
@@ -825,3 +826,32 @@ class SCDown(nn.Module):
 
     def forward(self, x):
         return self.cv2(self.cv1(x))
+
+class InvertedBlock(nn.Module):
+    def __init__(self, ch_in, ch_out, expand_ratio, stride):
+        super(InvertedBlock, self).__init__()
+
+        self.stride = stride
+        assert stride in [1,2]
+
+        hidden_dim = ch_in * expand_ratio
+
+        self.use_res_connect = self.stride==1 and ch_in==ch_out
+
+        layers = []
+        if expand_ratio != 1:
+            layers.append(conv1x1(ch_in, hidden_dim))
+        layers.extend([
+            #dw
+            dwise_conv(hidden_dim, stride=stride),
+            #pw
+            conv1x1(hidden_dim, ch_out)
+        ])
+
+        self.layers = nn.Sequential(*layers)
+
+    def forward(self, x):
+        if self.use_res_connect:
+            return x + self.layers(x)
+        else:
+            return self.layers(x)
