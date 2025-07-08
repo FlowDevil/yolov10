@@ -834,18 +834,18 @@ class InvertedBlock(nn.Module):
         self.stride = stride
         assert stride in [1,2]
 
-        hidden_dim = ch_in * expand_ratio
+        hidden_dim = c1 * expand_ratio
 
-        self.use_res_connect = self.stride==1 and ch_in==ch_out
+        self.use_res_connect = self.stride==1 and c1==c2
 
         layers = []
         if expand_ratio != 1:
-            layers.append(conv1x1(ch_in, hidden_dim))
+            layers.append(conv1x1(c1, hidden_dim))
         layers.extend([
             #dw
             dwise_conv(hidden_dim, stride=stride),
             #pw
-            conv1x1(hidden_dim, ch_out)
+            conv1x1(hidden_dim, c2)
         ])
 
         self.layers = nn.Sequential(*layers)
