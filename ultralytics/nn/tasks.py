@@ -53,6 +53,7 @@ from ultralytics.nn.modules import (
     PSA,
     SCDown,
     RepVGGDW,
+    InvertedBlock,
     v10Detect
 )
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, colorstr, emojis, yaml_load
